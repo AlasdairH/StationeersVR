@@ -63,6 +63,13 @@ namespace StationeersVR
             menuCanvas.transform.localScale = new Vector3(0.001043074f, 0.001043074f, 0.001043074f);
             menuCanvas.transform.Rotate(Vector3.up, -30f);
 
+            // Reposition the WorldInfo right next to the world selector.
+            Transform worldInfoXform = menuCanvas.transform.Find("WorldInfo");
+            if (worldInfoXform != null)
+            {
+                worldInfoXform.position = new Vector3(2.1f, 0.9f, 0.1f);
+            }
+
             // Don't allow the game to move the camera while we're in the menu. Clicking "New Game" wants
             // to rotate and move the camera, for example. As the menus are in world space, this means we
             // end up no longer being able to see the menus easily.
