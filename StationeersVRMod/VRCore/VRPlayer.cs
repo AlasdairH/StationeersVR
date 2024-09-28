@@ -685,6 +685,7 @@ namespace StationeersVR.VRCore
             Camera vrCam = CameraUtils.GetCamera(CameraUtils.VR_CAMERA);
             vrCam.GetOrAddComponent<FlareReceiver>().enabled = true;
             CameraUtils.CopyCamera(mainCamera, vrCam);
+            vrCam.GetComponent<CapsuleCollider>().enabled = false;
             //maybeCopyPostProcessingEffects(vrCam, mainCamera);
             //maybeAddAmplifyOcclusion(vrCam);
             // Prevent visibility of the head
