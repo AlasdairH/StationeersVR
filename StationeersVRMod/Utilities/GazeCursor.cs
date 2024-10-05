@@ -74,6 +74,9 @@ namespace StationeersVR.Utilities
         //This is where the raycast changes to mouse control and gazecursor
         public static Vector2 GetRayCastMode()
         {
+            if (Camera.current == null)
+                return new Vector2(0, 0);
+
             //Need to use Camera pixelWidth and pixelHeight with the Screen width and heigh so you have no restrction on mouse movement in vr
             if (!InventoryManager.AllowMouseControl)
             {

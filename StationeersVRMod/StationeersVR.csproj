@@ -13,8 +13,8 @@
       https://nuget.samboy.dev/v3/index.json
     </RestoreAdditionalProjectSources>
     <RootNamespace>StationeersVR</RootNamespace>
-    <GameDir>G:\SteamLibrary\steamapps\common\StationeersVR</GameDir>
-    <UnityDir>E:\UnityHub\2021.2.13f1\Editor\</UnityDir>
+    <GameDir>G:\Program Files (x86)\Steam\steamapps\common\StationeersModdedVR</GameDir>
+    <UnityDir>G:\Tools\Unity\2021.2.13f1\Editor\</UnityDir>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
@@ -33,7 +33,7 @@
 
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>lib\Assembly-CSharp_publicized.dll</HintPath>
+      <HintPath>$(GameDir)\rocketstation_Data\Managed\publicized_assemblies\Assembly-CSharp_publicized.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>$(GameDir)\rocketstation_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
@@ -58,7 +58,7 @@
       <HintPath>$(GameDir)\rocketstation_Data\Managed\SteamVR_Actions.dll</HintPath>
     </Reference>
     <Reference Include="SteamVR">
-      <HintPath>lib\SteamVR_publicized.dll</HintPath>
+      <HintPath>$(GameDir)\rocketstation_Data\Managed\publicized_assemblies\SteamVR_publicized.dll</HintPath>
     </Reference>
     <Reference Include="UniTask.TextMeshPro">
       <HintPath>$(GameDir)\rocketstation_Data\Managed\UniTask.TextMeshPro.dll</HintPath>
@@ -67,7 +67,7 @@
       <HintPath>$(GameDir)\rocketstation_Data\Managed\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="Unity.XR.Management">
-      <HintPath>lib\Unity.XR.Management_publicized.dll</HintPath>
+      <HintPath>$(GameDir)\rocketstation_Data\Managed\publicized_assemblies\Unity.XR.Management_publicized.dll</HintPath>
     </Reference>
     <Reference Include="Unity.XR.OpenVR, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -95,7 +95,7 @@
     </Reference>
   </ItemGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="xcopy /Y /F &quot;$(ProjectDir)bin\Debug\netstandard2.1\StationeersVR.dll&quot; &quot;$(GameDir)\BepInEx\plugins\StationeersVR&quot;" />
-		<Exec Command="xcopy /Y /F &quot;$(ProjectDir)bin\Debug\netstandard2.1\StationeersVR.pdb&quot; &quot;$(GameDir)\BepInEx\plugins\StationeersVR&quot;" />
+		<Exec Command="xcopy /Y /F /I &quot;$(ProjectDir)bin\Debug\netstandard2.1\StationeersVR.dll&quot; &quot;$(GameDir)\BepInEx\plugins\StationeersVR\&quot;" />
+		<Exec Command="xcopy /Y /F /I &quot;$(ProjectDir)bin\Debug\netstandard2.1\StationeersVR.pdb&quot; &quot;$(GameDir)\BepInEx\plugins\StationeersVR\&quot;" />
 	</Target>
 </Project>

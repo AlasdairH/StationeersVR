@@ -128,24 +128,25 @@ namespace StationeersVR.VRCore
         public static Hand dominantHand { get { return ConfigFile.LeftHanded ? leftHand : rightHand; } }
         //public static bool ShouldPauseMovement { get { return PlayerCustomizaton.IsBarberGuiVisible() || (Menu.IsVisible() && !ConfigFile.AllowMovementWhenInMenu()); } }
         public static bool ShouldPauseMovement { get { return IsPaused(); } }
-        public static bool IsPaused() { return GameManager.GameState == Assets.Scripts.GridSystem.GameState.Paused;}
+        public static bool IsPaused() { return GameManager.GameState == Assets.Scripts.GridSystem.GameState.Paused; }
         private bool turnModeSet = false;
         public static bool IsClickableGuiOpen
         {
-            get {
+            get
+            {
                 // TODO: Need to find all clickable menu or interfaces opened and add it here. 
                 InventoryManager inventoryManagerInstance = InventoryManager.Instance;
                 //ModLog.Debug("IsClickableGuiOpen: ConsoleWindow.IsOpen: " + ConsoleWindow.IsOpen + " InGameMenuOpen: " +  inventoryManagerInstance.InGameMenuOpen);
                 return ConsoleWindow.IsOpen || inventoryManagerInstance.InGameMenuOpen;
 
-                    /* Examples from Valheim:
-                     * 
-                     * Hud.IsPieceSelectionVisible() ||
-                    StoreGui.IsVisible() ||
-                    InventoryGui.IsVisible() ||
-                    Menu.IsVisible() ||
-                    (TextViewer.instance && TextViewer.instance.IsVisible()) ||
-                    Minimap.IsOpen();*/
+                /* Examples from Valheim:
+                 * 
+                 * Hud.IsPieceSelectionVisible() ||
+                StoreGui.IsVisible() ||
+                InventoryGui.IsVisible() ||
+                Menu.IsVisible() ||
+                (TextViewer.instance && TextViewer.instance.IsVisible()) ||
+                Minimap.IsOpen();*/
             }
         }
         /*
@@ -188,7 +189,7 @@ namespace StationeersVR.VRCore
             }
         }
 
-        public static SteamVR_LaserPointer leftPointer { get { return _leftPointer;} }
+        public static SteamVR_LaserPointer leftPointer { get { return _leftPointer; } }
         public static SteamVR_LaserPointer rightPointer { get { return _rightPointer; } }
         public static SteamVR_LaserPointer activePointer
         {
@@ -209,28 +210,30 @@ namespace StationeersVR.VRCore
             }
         }
 
-        public static bool inFirstPerson { get
+        public static bool inFirstPerson
+        {
+            get
             {
                 return (_headZoomLevel == HeadZoomLevel.FirstPerson) && attachedToPlayer;
             }
         }
-/*      // TODO: Check if it's needed in Stationeers
-        public static bool isMoving
-        {
-            get
-            {
-                if (Player.ClientData != "client" && attachedToPlayer)
+        /*      // TODO: Check if it's needed in Stationeers
+                public static bool isMoving
                 {
-                    //Vector3 relativeVelocity = Player.m_localPlayer.GetVelocity();
-                    Vector3 relativeVelocity = Player.controllingBody.velocity;
-                    if (Player.m_localPlayer.m_lastGroundBody)
-                        relativeVelocity -= Player.m_localPlayer.m_lastGroundBody.velocity;
-                    return relativeVelocity.magnitude > 0.5f;
+                    get
+                    {
+                        if (Player.ClientData != "client" && attachedToPlayer)
+                        {
+                            //Vector3 relativeVelocity = Player.m_localPlayer.GetVelocity();
+                            Vector3 relativeVelocity = Player.controllingBody.velocity;
+                            if (Player.m_localPlayer.m_lastGroundBody)
+                                relativeVelocity -= Player.m_localPlayer.m_lastGroundBody.velocity;
+                            return relativeVelocity.magnitude > 0.5f;
+                        }
+                        return false;
+                    }
                 }
-                return false;
-            }
-        }
-*/
+        */
         public static GameObject instance { get { return _instance; } }
         public static VRPlayer vrPlayerInstance => _vrPlayerInstance;
         public static bool attachedToPlayer = false;
@@ -265,7 +268,7 @@ namespace StationeersVR.VRCore
                 SteamVR_Fade.fadeMaterial = new Material(_fade_shader);
             }
 
-            _preferredHand = ConfigFile.GetDominantHand();            
+            _preferredHand = ConfigFile.GetDominantHand();
             headPositionInitialized = false;
             FIRST_PERSON_OFFSET = Vector3.zero;
             //THIRD_PERSON_CONFIG_OFFSET = ConfigFile.GetThirdPersonHeadOffset();
@@ -273,7 +276,7 @@ namespace StationeersVR.VRCore
             if (ConfigFile.UseVrControls)
             {
                 gameObject.AddComponent<VRControls>();
-            }               
+            }
         }
 
         float _scaleFactor = 0.7f;
@@ -297,7 +300,7 @@ namespace StationeersVR.VRCore
             }
         }
 
-        void Update()
+        void LateUpdate()
         {
             if (!ensurePlayerInstance())
             {
@@ -311,7 +314,7 @@ namespace StationeersVR.VRCore
             GUIVR.UpdateHud();
             GUIVR.ToggleHudElements();
             GetGameState();
-            if (Input.GetKey(KeyCode.Y))
+            if (Input.GetKeyDown(KeyCode.Y))
             {
                 ModLog.Debug("Triggered Recenter pose action.");
                 VRManager.TryRecenter();
@@ -335,14 +338,14 @@ namespace StationeersVR.VRCore
         void GetGameState()
         {
             currentgameState = GameManager.GameState;
-            if(GameManager.GameState != currentgameState)
+            if (GameManager.GameState != currentgameState)
             {
                 ModLog.Debug("GameState Change Vr Re-Centered");
                 VRManager.TryRecenter();
             }
 
         }
-    
+
 
         /*
                 private void FixedUpdate() 
@@ -399,30 +402,30 @@ namespace StationeersVR.VRCore
         {
             //if (ConfigFile.AllowHeadRepositioning())
             //{
-                if (Input.GetKeyDown(KeyCode.UpArrow))
-                {
-                    updateHeadOffset(new Vector3(0f, 0f, 0.1f));
-                }
-                if (Input.GetKeyDown(KeyCode.DownArrow))
-                {
-                    updateHeadOffset(new Vector3(0f, 0f, -0.1f));
-                }
-                if (Input.GetKeyDown(KeyCode.LeftArrow))
-                {
-                    updateHeadOffset(new Vector3(-0.1f, 0f, 0f));
-                }
-                if (Input.GetKeyDown(KeyCode.RightArrow))
-                {
-                    updateHeadOffset(new Vector3(0.1f, 0f, 0f));
-                }
-                if (Input.GetKeyDown(KeyCode.RightBracket))
-                {
-                    updateHeadOffset(new Vector3(0f, 0.1f, 0f));
-                }
-                if (Input.GetKeyDown(KeyCode.LeftBracket))
-                {
-                    updateHeadOffset(new Vector3(0f, -0.1f, 0f));
-                }
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                updateHeadOffset(new Vector3(0f, 0f, 0.1f));
+            }
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                updateHeadOffset(new Vector3(0f, 0f, -0.1f));
+            }
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                updateHeadOffset(new Vector3(-0.1f, 0f, 0f));
+            }
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                updateHeadOffset(new Vector3(0.1f, 0f, 0f));
+            }
+            if (Input.GetKeyDown(KeyCode.RightBracket))
+            {
+                updateHeadOffset(new Vector3(0f, 0.1f, 0f));
+            }
+            if (Input.GetKeyDown(KeyCode.LeftBracket))
+            {
+                updateHeadOffset(new Vector3(0f, -0.1f, 0f));
+            }
             //}
         }
 
@@ -436,25 +439,26 @@ namespace StationeersVR.VRCore
             if (inFirstPerson)
             {
                 FIRST_PERSON_OFFSET += offset;
-            } else
+            }
+            else
             {
                 THIRD_PERSON_CONFIG_OFFSET += offset;
                 //ConfigFile.UpdateThirdPersonHeadOffset(THIRD_PERSON_CONFIG_OFFSET);
             }
         }
 
-/*
-        void UpdateAmplifyOcclusionStatus()
-        {
-            if (_vrCam == null || _vrCam.gameObject.GetComponent<AmplifyOcclusionEffect>() == null)
-            {
-                return;
-            }
-            var effect = _vrCam.gameObject.GetComponent<AmplifyOcclusionEffect>();
-            effect.SampleCount = SampleCountLevel.Medium;
-            effect.enabled = ConfigFile.UseAmplifyOcclusion();
-        }
-*/
+        /*
+                void UpdateAmplifyOcclusionStatus()
+                {
+                    if (_vrCam == null || _vrCam.gameObject.GetComponent<AmplifyOcclusionEffect>() == null)
+                    {
+                        return;
+                    }
+                    var effect = _vrCam.gameObject.GetComponent<AmplifyOcclusionEffect>();
+                    effect.SampleCount = SampleCountLevel.Medium;
+                    effect.enabled = ConfigFile.UseAmplifyOcclusion();
+                }
+        */
         private void checkAndSetHandsAndPointers()
         {
             tryInitializeHands();
@@ -466,7 +470,7 @@ namespace StationeersVR.VRCore
             if (_rightHand != null)
             {
                 _rightHand.enabled = ConfigFile.UseVrControls;
-                _rightHand.SetVisibility(_rightHand.enabled&& !vrikEnabled()) ;
+                _rightHand.SetVisibility(_rightHand.enabled && !vrikEnabled());
             }
             // Next check whether the hands are active, and enable the appropriate pointer based
             // on what is available and what the options set as preferred. Disable the inactive pointer(s).
@@ -477,20 +481,24 @@ namespace StationeersVR.VRCore
                 {
                     setPointerActive(_leftPointer, true);
                     setPointerActive(_rightPointer, false);
-                } else
+                }
+                else
                 {
                     setPointerActive(_rightPointer, true);
                     setPointerActive(_leftPointer, false);
                 }
-            } else if (handIsActive(_rightHand, _rightPointer))
+            }
+            else if (handIsActive(_rightHand, _rightPointer))
             {
                 setPointerActive(_rightPointer, true);
                 setPointerActive(_leftPointer, false);
-            } else if (handIsActive(_leftHand, _leftPointer))
+            }
+            else if (handIsActive(_leftHand, _leftPointer))
             {
                 setPointerActive(_leftPointer, true);
                 setPointerActive(_rightPointer, false);
-            } else
+            }
+            else
             {
                 setPointerActive(_leftPointer, false);
                 setPointerActive(_rightPointer, false);
@@ -509,7 +517,7 @@ namespace StationeersVR.VRCore
                     _leftPointer = _leftHand.GetComponent<SteamVR_LaserPointer>();
                     if (_leftPointer.pointer != null)
                     {
-                        _leftPointer.pointer.SetActive(false);
+                        //_leftPointer.pointer.SetActive(false);
                         //_leftPointer.raycastLayerMask = LayerUtils.UI_PANEL_LAYER_MASK;
                     }
                 }
@@ -523,7 +531,7 @@ namespace StationeersVR.VRCore
                     _rightPointer = _rightHand.GetComponent<SteamVR_LaserPointer>();
                     if (_rightPointer.pointer != null)
                     {
-                        _rightPointer.pointer.SetActive(false);
+                        //_rightPointer.pointer.SetActive(false);
                         //_rightPointer.raycastLayerMask = LayerUtils.UI_PANEL_LAYER_MASK;
                     }
                 }
@@ -650,7 +658,8 @@ namespace StationeersVR.VRCore
             {
                 enableVrCamera();
                 createUiPanelCamera();
-            } else
+            }
+            else
             {
                 _vrCam.nearClipPlane = ConfigFile.nearClipPlane;
             }
@@ -662,7 +671,7 @@ namespace StationeersVR.VRCore
             if (_backgroundCam == null || !_backgroundCam.enabled)
             {
                 enablebackgroundCamera();
-        }
+            }
             if (_foregroundCam == null || !_foregroundCam.enabled)
             {
                 enableforegroundCamera();
@@ -693,10 +702,10 @@ namespace StationeersVR.VRCore
             // Turn off rendering the UI panel layer. We need to capture
             // it in a camera of higher depth so that it
             // is rendered on top of everything else. (except hands)
-//            vrCam.cullingMask &= ~(1 << LayerUtils.getUiPanelLayer());
-//            vrCam.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
-//            vrCam.cullingMask &= ~(1 << LayerUtils.getHandsLayer());
-//            vrCam.cullingMask &= ~(1 << LayerUtils.getWorldspaceUiLayer());
+            //            vrCam.cullingMask &= ~(1 << LayerUtils.getUiPanelLayer());
+            //            vrCam.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
+            //            vrCam.cullingMask &= ~(1 << LayerUtils.getHandsLayer());
+            //            vrCam.cullingMask &= ~(1 << LayerUtils.getWorldspaceUiLayer());
             mainCamera.enabled = false;
             mainCamera.gameObject.tag = "Untagged";
             vrCam.tag = "MainCamera";
@@ -707,7 +716,7 @@ namespace StationeersVR.VRCore
                 DestroyImmediate(mainCamListener);
             }
             //Add fade component to camera for transition handling
-//            _fadeManager = vrCam.gameObject.AddComponent<FadeToBlackManager>();
+            //            _fadeManager = vrCam.gameObject.AddComponent<FadeToBlackManager>();
             _instance.SetActive(true);
             vrCam.enabled = true;
             //ModLog.Error("Scale: " + Human.LocalHuman.transform.localScale);
@@ -715,13 +724,13 @@ namespace StationeersVR.VRCore
             _vrCam = vrCam;
             _vrCameraRig = vrCam.transform.parent;
 
-/*
-            _fadeManager.OnFadeToWorld += () => {
-                //Recenter
-                VRPlayer.headPositionInitialized = false;
-                VRPlayer.vrPlayerInstance?.ResetRoomscaleCamera();
-            };
-*/
+            /*
+                        _fadeManager.OnFadeToWorld += () => {
+                            //Recenter
+                            VRPlayer.headPositionInitialized = false;
+                            VRPlayer.vrPlayerInstance?.ResetRoomscaleCamera();
+                        };
+            */
         }
 
 
@@ -795,29 +804,29 @@ namespace StationeersVR.VRCore
         // Search for the original skybox cam, if found, copy it, disable it,
         // and make new camera child of VR camera
         // TODO: Not yet tested/enabled for VR.
-/*
-        private void enableSkyboxCamera()
-        {
-            Camera originalSkyboxCamera = CameraUtils.GetCamera(CameraUtils.SKYBOX_CAMERA);
-            if (originalSkyboxCamera == null || originalSkyboxCamera.gameObject == null)
-            {
-                return;
-            }
-            Camera vrCam = CameraUtils.GetCamera(CameraUtils.VR_CAMERA);
-            if(vrCam == null || vrCam.gameObject == null)
-            {
-                return;
-            }
-            GameObject vrSkyboxCamObj = new(CameraUtils.VRSKYBOX_CAMERA);
-            Camera vrSkyboxCam = vrSkyboxCamObj.AddComponent<Camera>();
-            vrSkyboxCam.CopyFrom(originalSkyboxCamera);
-            vrSkyboxCam.depth = -2;
-            vrSkyboxCam.transform.SetParent(vrCam.transform);
-            originalSkyboxCamera.enabled = false;
-            vrSkyboxCam.enabled = true;
-            //_skyboxCam = vrSkyboxCam;
-        }
-*/
+        /*
+                private void enableSkyboxCamera()
+                {
+                    Camera originalSkyboxCamera = CameraUtils.GetCamera(CameraUtils.SKYBOX_CAMERA);
+                    if (originalSkyboxCamera == null || originalSkyboxCamera.gameObject == null)
+                    {
+                        return;
+                    }
+                    Camera vrCam = CameraUtils.GetCamera(CameraUtils.VR_CAMERA);
+                    if(vrCam == null || vrCam.gameObject == null)
+                    {
+                        return;
+                    }
+                    GameObject vrSkyboxCamObj = new(CameraUtils.VRSKYBOX_CAMERA);
+                    Camera vrSkyboxCam = vrSkyboxCamObj.AddComponent<Camera>();
+                    vrSkyboxCam.CopyFrom(originalSkyboxCamera);
+                    vrSkyboxCam.depth = -2;
+                    vrSkyboxCam.transform.SetParent(vrCam.transform);
+                    originalSkyboxCamera.enabled = false;
+                    vrSkyboxCam.enabled = true;
+                    //_skyboxCam = vrSkyboxCam;
+                }
+        */
 
         private void attachVrPlayerToWorldObject()
         {
@@ -842,7 +851,8 @@ namespace StationeersVR.VRCore
             if (mouseScroll > 0f)
             {
                 zoomCamera(true);
-            } else if (mouseScroll < 0f)
+            }
+            else if (mouseScroll < 0f)
             {
                 zoomCamera(false);
             }
@@ -851,7 +861,7 @@ namespace StationeersVR.VRCore
         //TODO: For now, the mod only works in single player. Need to work on this for 3rd person view
         private void zoomCamera(bool zoomIn)
         {
-            switch(_headZoomLevel)
+            switch (_headZoomLevel)
             {
                 case HeadZoomLevel.FirstPerson:
                     _headZoomLevel = zoomIn ? HeadZoomLevel.FirstPerson : HeadZoomLevel.ThirdPerson0;
@@ -895,7 +905,7 @@ namespace StationeersVR.VRCore
         private bool canAdjustCameraDistance()
         {
             //ModLog.Debug("canAdjustCameraDistance: IsClickableGuiOpen: " + IsClickableGuiOpen + " getPlayerCharacter().ChatPanel.isActiveAndEnabled: " + getPlayerCharacter().ChatPanel.isActiveAndEnabled + " attachedToPlayer: " + attachedToPlayer);
-            return !IsClickableGuiOpen && 
+            return !IsClickableGuiOpen &&
                    !getPlayerCharacter().ChatPanel.isActiveAndEnabled &&
                    attachedToPlayer;
             /* Valheim examples:
@@ -914,18 +924,18 @@ namespace StationeersVR.VRCore
                    SceneManager.GetActiveScene().name != CHARACTER_CUSTOMISATION &&
                    ensurePlayerInstance() &&
                    !getPlayerCharacter().Dead;
-                    //TODO: Add programming in computer, in stationpedia
+            //TODO: Add programming in computer, in stationpedia
 
- /*          Valheim examples:
-  *             return getPlayerCharacter() != null &&
-                SceneManager.GetActiveScene().name != START_SCENE &&
-                ensurePlayerInstance() &&
-                !getPlayerCharacter().InCutscene() &&
-                !getPlayerCharacter().IsDead() &&
-                !getPlayerCharacter().InBed() &&
-                !PlayerCustomizaton.IsBarberGuiVisible();
- */
-         }
+            /*          Valheim examples:
+             *             return getPlayerCharacter() != null &&
+                           SceneManager.GetActiveScene().name != START_SCENE &&
+                           ensurePlayerInstance() &&
+                           !getPlayerCharacter().InCutscene() &&
+                           !getPlayerCharacter().IsDead() &&
+                           !getPlayerCharacter().InBed() &&
+                           !PlayerCustomizaton.IsBarberGuiVisible();
+            */
+        }
 
         private void attachVrPlayerToPlayerCharacter()
         {
@@ -940,8 +950,6 @@ namespace StationeersVR.VRCore
                 ModLog.Error("SteamVR Player instance is null. Cannot attach!");
                 return;
             }
-            //Maybe a fix for the lander
-            _instance.transform.SetParent(playerCharacter.CameraRig.transform, false);
             attachedToPlayer = true;
             //ModLog.Debug("Player character and SteamVR instance found! Attaching to player.");
 
@@ -950,12 +958,12 @@ namespace StationeersVR.VRCore
             setHeadVisibility(!inFirstPerson);
             // Update the position with the first person adjustment calculated in init phase
             Vector3 desiredPosition = getDesiredPosition(playerCharacter);
-            
+
             _instance.transform.localPosition = desiredPosition - playerCharacter.transform.position  // Base Positioning
                                                + Vector3.up * getHeadHeightAdjust(playerCharacter)
                                                + Vector3.up * firstPersonAdjust; // Offset from calibration on tracking recenter
-                                               
-            if(_headZoomLevel != HeadZoomLevel.FirstPerson)
+
+            if (_headZoomLevel != HeadZoomLevel.FirstPerson)
             {
                 _instance.transform.localPosition += getHeadOffset(_headZoomLevel) // Player controlled offset (zeroed on tracking reset)
                             + Vector3.forward * NECK_OFFSET; // Move slightly forward to position on neck
@@ -964,7 +972,7 @@ namespace StationeersVR.VRCore
             else
                 setPlayerVisualsOffset(playerCharacter.transform,
                                 -getHeadOffset(_headZoomLevel) // Player controlled offset (zeroed on tracking reset)
-                                -Vector3.forward * NECK_OFFSET // Move slightly forward to position on neck
+                                - Vector3.forward * NECK_OFFSET // Move slightly forward to position on neck
             );
             if (!turnModeSet)
             {
@@ -974,7 +982,7 @@ namespace StationeersVR.VRCore
 
         //Choose between characterContinuousTurn or SnapTurn
         public void setPlayerTurnMode()
-        {            
+        {
             if (!ConfigFile.UseVrControls)
             {
                 return;
@@ -1015,17 +1023,17 @@ namespace StationeersVR.VRCore
         //Moves all the effects and the meshes that compose the player, doesn't move the Rigidbody
         private void setPlayerVisualsOffset(Transform playerTransform, Vector3 offset)
         {
-            for(int i = 0; i < playerTransform.childCount; i++)
+            for (int i = 0; i < playerTransform.childCount; i++)
             {
                 Transform child = playerTransform.GetChild(i);
-                if(child == _instance.transform || child.name == "EyePos") continue;
-                playerTransform.GetChild(i).localPosition = offset;                          
+                if (child == _instance.transform || child.name == "EyePos") continue;
+                playerTransform.GetChild(i).localPosition = offset;
             }
         }
 
         private float getHeadHeightAdjust(Human player)
         {
-            if (player.MovementController.ControlMode == Mode.Seated)            
+            if (player.MovementController.ControlMode == Mode.Seated)
             {
                 return SIT_HEIGHT_ADJUST;
                 /*if (player.IsAttached())
@@ -1049,7 +1057,8 @@ namespace StationeersVR.VRCore
                 return;
             }
             maybeAddVrik(player);
-            if (_vrik != null) {
+            if (_vrik != null)
+            {
                 _vrik.enabled = ConfigFile.UseVrControls &&
                     inFirstPerson &&
                     /*!player.InDodge() &&
@@ -1118,17 +1127,18 @@ namespace StationeersVR.VRCore
         {
             if (!headPositionInitialized && inFirstPerson)
             {
+                ModLog.Info("Initializing VR head position");
                 // First set the position without any adjustment
                 Vector3 desiredPosition = getDesiredPosition(playerCharacter);
                 _instance.transform.localPosition = desiredPosition - playerCharacter.transform.position;
 
-                if(_headZoomLevel != HeadZoomLevel.FirstPerson)
+                if (_headZoomLevel != HeadZoomLevel.FirstPerson)
                     _instance.transform.localPosition += getHeadOffset(_headZoomLevel);
                 else
                     setPlayerVisualsOffset(playerCharacter.transform, -getHeadOffset(_headZoomLevel));
 
                 var hmd = Valve.VR.InteractionSystem.Player.instance.hmdTransform;
-                // Measure the distance between HMD and desires location, and save it.
+                // Measure the distance between HMD and desired location, and save it.
                 FIRST_PERSON_HEIGHT_OFFSET = desiredPosition.y - hmd.position.y;
                 if (ConfigFile.UseLookLocomotion)
                 {
@@ -1146,8 +1156,10 @@ namespace StationeersVR.VRCore
             {
                 return Vector3.zero;
             }
+            float magicOffset = playerCharacter.ParentSlot != null && playerCharacter.ParentSlot.Parent is LanderCapsule ? -0.495f : 0.095f;
             return new Vector3(playerCharacter.transform.position.x,
-                    playerCharacter.CameraController.MainCameraPosition.y - 0.095f, playerCharacter.transform.position.z);
+                               playerCharacter.CameraController.MainCameraPosition.y - magicOffset,
+                               playerCharacter.transform.position.z);
             /*Valheim Example:
              * return new Vector3(playerCharacter.transform.position.x,
                     playerCharacter.GetEyePoint().y, playerCharacter.transform.position.z);*/
@@ -1174,38 +1186,38 @@ namespace StationeersVR.VRCore
             attachedToPlayer = false;
             headPositionInitialized = false;
         }
-        
+
         // Used to turn off the head model when player is currently occupying it.
         private void setHeadVisibility(bool isVisible)
         {
- /*           if (ConfigFile.UseVrControls) {
-                return;
-            }
- */           
- /*
-            var headBone = getHeadBone();
-            if (headBone != null)
-            {
-                headBone.localScale = isVisible ? new Vector3(1f, 1f, 1f) : new Vector3(0.001f, 0.001f, 0.001f);
-            }
- */
+            /*           if (ConfigFile.UseVrControls) {
+                           return;
+                       }
+            */
+            /*
+                       var headBone = getHeadBone();
+                       if (headBone != null)
+                       {
+                           headBone.localScale = isVisible ? new Vector3(1f, 1f, 1f) : new Vector3(0.001f, 0.001f, 0.001f);
+                       }
+            */
         }
-/*
-        private Transform getHeadBone()
-        {
-            var playerCharacter = getPlayerCharacter();
-            if (playerCharacter == null)
-            {
-                return null;
-            }
-            var animator = playerCharacter.GetComponentInChildren<Animator>();
-            if (animator == null)
-            {
-                return null;
-            }
-            return animator.GetBoneTransform(HumanBodyBones.Head);
-        }
-*/
+        /*
+                private Transform getHeadBone()
+                {
+                    var playerCharacter = getPlayerCharacter();
+                    if (playerCharacter == null)
+                    {
+                        return null;
+                    }
+                    var animator = playerCharacter.GetComponentInChildren<Animator>();
+                    if (animator == null)
+                    {
+                        return null;
+                    }
+                    return animator.GetBoneTransform(HumanBodyBones.Head);
+                }
+        */
         // This will, if it hasn't already done so, try and find the PostProcessingBehaviour
         // script attached to the main camera and copy it over to the VR camera and then
         // add the DepthOfField & CameraEffects components. This enables all the post
@@ -1213,61 +1225,61 @@ namespace StationeersVR.VRCore
         // and don't work well. Depth of Field doesn't seem to actually generate depth - others
         // work okay and the world looks much nicer. SSAO is a significant boost in image
         // quality, but it comes at a heavy performance cost.
- /*       private void maybeCopyPostProcessingEffects(Camera vrCamera, Camera mainCamera)
-        {
-            if (vrCamera == null || mainCamera == null)
-            {
-                return;
-            }
-            if (vrCamera.gameObject.GetComponent<PostProcessingBehaviour>() != null)
-            {
-                return;
-            }
-            PostProcessingBehaviour postProcessingBehavior = null;
-            bool foundMainCameraPostProcesor = false;
-            foreach (var ppb in GameObject.FindObjectsOfType<PostProcessingBehaviour>())
-            {
-                if (ppb.name == CameraUtils.MAIN_CAMERA)
-                {
-                    foundMainCameraPostProcesor = true;
-                    postProcessingBehavior = vrCamera.gameObject.AddComponent<PostProcessingBehaviour>();
-                    ModLog.Debug("Copying Main Camera PostProcessingBehaviour");
-                    var profileClone = Instantiate(ppb.profile);
-                    //Need to copy only the profile and jitterFuncMatrix, everything else will be instanciated when enabled
-                    postProcessingBehavior.profile = profileClone;
-                    postProcessingBehavior.jitteredMatrixFunc = ppb.jitteredMatrixFunc;
-                    if(ppb.enabled) ppb.enabled = false;
-                }
-            }
-            if (!foundMainCameraPostProcesor)
-            {
-                return;
-            }
-            var mainCamDepthOfField = mainCamera.gameObject.GetComponent<DepthOfField>();
-            var vrCamDepthOfField =  vrCamera.gameObject.AddComponent<DepthOfField>();
-            if (mainCamDepthOfField != null)
-            {
-                CopyClassFields(mainCamDepthOfField, ref vrCamDepthOfField);
-            }
-            var vrCamSunshaft = vrCamera.gameObject.AddComponent<SunShafts>();
-            var mainCamSunshaft = mainCamera.gameObject.GetComponent<SunShafts>();
-            if (mainCamSunshaft != null)
-            {
-                CopyClassFields(mainCamSunshaft, ref vrCamSunshaft);
-            }
-            var vrCamEffects = vrCamera.gameObject.AddComponent<CameraEffects>();
-            var mainCamEffects = mainCamera.gameObject.GetComponent<CameraEffects>();
-            if (mainCamEffects != null)
-            {
-                // Need to copy over only the DOF fields
-                vrCamEffects.m_forceDof = mainCamEffects.m_forceDof;
-                vrCamEffects.m_dofRayMask = mainCamEffects.m_dofRayMask;
-                vrCamEffects.m_dofAutoFocus = mainCamEffects.m_dofAutoFocus;
-                vrCamEffects.m_dofMinDistance = mainCamEffects.m_dofMinDistance;
-                vrCamEffects.m_dofMaxDistance = mainCamEffects.m_dofMaxDistance;
-            }
-        }
- */
+        /*       private void maybeCopyPostProcessingEffects(Camera vrCamera, Camera mainCamera)
+               {
+                   if (vrCamera == null || mainCamera == null)
+                   {
+                       return;
+                   }
+                   if (vrCamera.gameObject.GetComponent<PostProcessingBehaviour>() != null)
+                   {
+                       return;
+                   }
+                   PostProcessingBehaviour postProcessingBehavior = null;
+                   bool foundMainCameraPostProcesor = false;
+                   foreach (var ppb in GameObject.FindObjectsOfType<PostProcessingBehaviour>())
+                   {
+                       if (ppb.name == CameraUtils.MAIN_CAMERA)
+                       {
+                           foundMainCameraPostProcesor = true;
+                           postProcessingBehavior = vrCamera.gameObject.AddComponent<PostProcessingBehaviour>();
+                           ModLog.Debug("Copying Main Camera PostProcessingBehaviour");
+                           var profileClone = Instantiate(ppb.profile);
+                           //Need to copy only the profile and jitterFuncMatrix, everything else will be instanciated when enabled
+                           postProcessingBehavior.profile = profileClone;
+                           postProcessingBehavior.jitteredMatrixFunc = ppb.jitteredMatrixFunc;
+                           if(ppb.enabled) ppb.enabled = false;
+                       }
+                   }
+                   if (!foundMainCameraPostProcesor)
+                   {
+                       return;
+                   }
+                   var mainCamDepthOfField = mainCamera.gameObject.GetComponent<DepthOfField>();
+                   var vrCamDepthOfField =  vrCamera.gameObject.AddComponent<DepthOfField>();
+                   if (mainCamDepthOfField != null)
+                   {
+                       CopyClassFields(mainCamDepthOfField, ref vrCamDepthOfField);
+                   }
+                   var vrCamSunshaft = vrCamera.gameObject.AddComponent<SunShafts>();
+                   var mainCamSunshaft = mainCamera.gameObject.GetComponent<SunShafts>();
+                   if (mainCamSunshaft != null)
+                   {
+                       CopyClassFields(mainCamSunshaft, ref vrCamSunshaft);
+                   }
+                   var vrCamEffects = vrCamera.gameObject.AddComponent<CameraEffects>();
+                   var mainCamEffects = mainCamera.gameObject.GetComponent<CameraEffects>();
+                   if (mainCamEffects != null)
+                   {
+                       // Need to copy over only the DOF fields
+                       vrCamEffects.m_forceDof = mainCamEffects.m_forceDof;
+                       vrCamEffects.m_dofRayMask = mainCamEffects.m_dofRayMask;
+                       vrCamEffects.m_dofAutoFocus = mainCamEffects.m_dofAutoFocus;
+                       vrCamEffects.m_dofMinDistance = mainCamEffects.m_dofMinDistance;
+                       vrCamEffects.m_dofMaxDistance = mainCamEffects.m_dofMaxDistance;
+                   }
+               }
+        */
         private void CopyClassFields<T>(T source, ref T dest)
         {
             FieldInfo[] fieldsToCopy = source.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -1338,7 +1350,7 @@ namespace StationeersVR.VRCore
  */
         public void ResetRoomscaleCamera()
         {
-            if(_vrCameraRig != null)
+            if (_vrCameraRig != null)
             {
                 Vector3 vrCamPosition = _vrCam.transform.localPosition;
                 vrCamPosition.y = 0;

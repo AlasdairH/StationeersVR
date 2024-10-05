@@ -42,6 +42,12 @@ namespace StationeersVR.Utilities
         {
             GazeControl();
         }
+    
+
+        void Update()
+        {
+            GazeControl();
+        }
 
 
         protected static PointerEventData.FramePressState StateForButton(int buttonCode)
@@ -60,7 +66,7 @@ namespace StationeersVR.Utilities
         protected MouseState CreateGazePointerEvent(int id)
         {
             PointerEventData data;
-            if (Camera.current != null)
+            //if (Camera.current != null)
             {
                 Vector2 pos = SimpleGazeCursor.GetRayCastMode();
                 bool pointerData = GetPointerData(-1, out data, create: true);
